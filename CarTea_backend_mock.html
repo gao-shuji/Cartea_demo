@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CarTea 配置后台</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Microsoft YaHei",sans-serif;background:#f5f6f8;color:#333}
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:260px;background:#fff;border-right:1px solid #eee;padding:18px 0;position:relative}
+.logo{font-size:18px;font-weight:bold;padding:0 18px 22px}
+.logo:before{content:"●";color:#20a36b;margin-right:8px}
+.menu{height:calc(100vh - 100px);overflow:auto}
+.item{padding:12px 18px;color:#555;cursor:pointer;display:flex;justify-content:space-between}
+.item:hover,.item.active{background:#f0f5f3;color:#16996a}
+.sub{padding-left:32px;font-size:14px}
+.user{position:absolute;bottom:15px;left:18px;right:18px;display:flex;justify-content:space-between}
+.main{flex:1;padding:42px;overflow:auto}
+.card{background:#fff;border-radius:8px;padding:22px;margin-bottom:18px}
+.form{display:flex;gap:14px;align-items:center}
+input,select,button{height:34px;border:1px solid #ddd;border-radius:5px;padding:0 14px;background:#fff}
+button{cursor:pointer}
+.green{background:#139b6d;color:white;border:none}
+.toolbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse}
+th{background:#fafafa;text-align:left;padding:14px;font-size:14px}
+td{padding:18px 14px;border-bottom:1px solid #eee}
+.logoimg{width:62px;height:62px;border-radius:5px;background:#ddd;display:flex;align-items:center;justify-content:center}
+.name{color:#159b6b;font-weight:600}
+.stat span{margin-right:16px}
+.view{color:#d9534f}.phone{color:#e5b300}.wa{color:#20a36b}.chart{color:#8b42d6}
+.action button{display:block;width:100px;margin:5px 0}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="logo">CarTea 配置后台</div>
+<div class="menu">
+<div class="item">图片媒体管理</div>
+<div class="item">首页配置管理⌄</div>
+<div class="item">资讯内容管理⌄</div>
+<div class="item">推荐管理⌄</div>
+<div class="item">专题管理</div>
+<div class="item">社区管理⌄</div>
+<div class="item">车服务管理⌄</div>
+<div class="item active">经销商管理⌃</div>
+<div class="sub item active">认证经销商</div>
+<div class="sub item">购车线索</div>
+<div class="sub item">留资线索配置</div>
+<div class="sub item">经销商广告统计</div>
+<div class="item">车源广告报价管理</div>
+<div class="item">SEO管理⌄</div>
+<div class="item">优惠券管理⌄</div>
+</div>
+<div class="user"><span>◯ test</span><button>退出</button></div>
+</aside>
+
+<main class="main">
+<div class="card">
+<div class="form">
+<label>车商名称：</label><input placeholder="请输入">
+<label>国家/城市：</label><select><option>请选择国家/城市</option></select>
+<button>重置</button><button class="green">查询</button>
+</div>
+</div>
+
+<div class="card">
+<div class="toolbar">
+<button>导出CSV</button><button class="green" onclick="add()">＋ 新增车商</button>
+<button onclick="refresh()">⟳</button>
+</div>
+<table>
+<thead><tr>
+<th>车商Logo</th><th>车商名称</th><th>国家/城市</th><th>统计数据</th><th>账号状态</th><th>创建时间</th><th>更新时间</th><th>操作</th>
+</tr></thead>
+<tbody id="list"></tbody>
+</table>
+</div>
+</main>
+</div>
+
+<script>
+let data=[
+["AlBake Used Cars","Sharjah","2222","2","28","5"],
+["Al Fayha Cars","Ajman","2593","1","23","2"],
+["Al Fareed Used Cars","Sharjah","9007","14","153","76"],
+["Legend Motors","Dubai","3420","6","37","10"],
+["Albasma Motors","Sharjah","3879","19","42","18"]
+];
+function render(){
+list.innerHTML=data.map((x,i)=>`
+<tr>
+<td><div class="logoimg">LOGO</div></td>
+<td><div class="name">${x[0]}</div></td>
+<td>uae<br>${x[1]}</td>
+<td class="stat"><span class="view">◉ ${x[2]} 观看</span><span class="phone">☎ ${x[3]} 呼叫</span><span class="wa">◉ ${x[4]} WhatsApp</span><span class="chart">▥ ${x[5]} 留资</span></td>
+<td>已激活</td>
+<td>2025-12-03<br>22:09:15</td>
+<td>2026-06-25<br>16:38:58</td>
+<td class="action">
+<button class="green" onclick="edit('${x[0]}')">✎ 编辑车商</button>
+<button onclick="alert('广告统计')">▥ 广告统计</button>
+<button onclick="alert('账号包')">⚙ 账号包</button>
+</td>
+</tr>`).join('')
+}
+function edit(n){alert("编辑："+n)}
+function add(){let n=prompt("请输入车商名称");if(n){data.push([n,"Dubai","0","0","0","0"]);render()}}
+function refresh(){render()}
+render();
+</script>
+</body>
+</html>
