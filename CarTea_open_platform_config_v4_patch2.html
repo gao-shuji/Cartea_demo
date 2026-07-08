@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>CarTea 开放平台配置</title>
+<style>
+*{box-sizing:border-box;font-family:"Microsoft YaHei",Arial}
+body{margin:0;background:#f5f6f8;color:#303133}
+.layout{display:flex;height:100vh}
+.sidebar{width:250px;background:#fff;border-right:1px solid #ebeef5}
+.logo{padding:18px 20px;font-weight:600;border-bottom:1px solid #eee}
+.menu div{height:42px;line-height:42px;padding-left:24px;color:#606266;font-size:14px}
+.menu .active{background:#ecf5ff;color:#009688}
+.main{flex:1;padding:24px}
+.card{background:#fff;border-radius:6px;padding:20px;margin-bottom:16px}
+input,select{height:34px;border:1px solid #dcdfe6;border-radius:4px;padding:0 10px;margin-left:8px}
+button{height:32px;padding:0 15px;border-radius:4px;border:1px solid #dcdfe6;background:#fff;cursor:pointer}
+.primary{background:#009688;color:#fff;border-color:#009688}
+.toolbar{text-align:right;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:#fafafa;color:#606266;font-weight:500}
+th,td{height:52px;padding:0 16px;border-bottom:1px solid #ebeef5}
+.tag{padding:4px 10px;border-radius:12px;background:#ecf8f2;color:#009688}
+.mask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35)}
+.drawer{display:none;position:fixed;right:0;top:0;width:480px;height:100%;background:#fff;box-shadow:-4px 0 12px rgba(0,0,0,.12)}
+.drawer.show,.dialog.show{display:block}
+.drawer-header{height:56px;border-bottom:1px solid #eee;padding:18px 24px;display:flex;justify-content:space-between}
+.drawer-body{padding:24px}
+.form-item{margin-bottom:18px}
+.form-item label{display:block;margin-bottom:8px;color:#606266}
+.form-item input,.form-item select{width:100%;margin:0}
+.readonly{height:34px;line-height:34px;color:#606266;padding-left:2px}
+.section-title{font-weight:600;margin:24px 0 16px}
+.drawer-footer{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;border-top:1px solid #eee;text-align:right}
+.dialog{display:none;position:fixed;left:50%;top:35%;transform:translate(-50%,-50%);background:#fff;width:400px;padding:24px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar">
+<div class="logo">CarTea 配置后台</div>
+<div class="menu">
+<div>图片媒体管理</div>
+<div>首页配置管理</div>
+<div>资讯内容管理</div>
+<div>推荐管理</div>
+<div>专题管理</div>
+<div>社区管理</div>
+<div>车服务管理</div>
+<div>经销商管理</div>
+<div>车源广告报价管理</div>
+<div>SEO管理</div>
+<div>优惠券管理</div>
+<div>广告位入口管理</div>
+<div>专题配置</div>
+<div>贷款银行管理</div>
+<div>二手车频道配置</div>
+<div>新车频道配置</div>
+<div>中国车频道配置</div>
+<div class="active">开放平台配置</div>
+</div>
+</div>
+
+<div class="main">
+<div class="card">
+<label>商家名称<input></label>
+<label>商家类型<select><option>全部</option><option>二手车经销商</option></select></label>
+<label>状态<select><option>全部</option><option>启用</option><option>禁用</option></select></label>
+<button>重置</button><button class="primary">查询</button>
+</div>
+
+<div class="card">
+<div class="toolbar"><button class="primary" onclick="addDealer()">+ 新增商家</button></div>
+<table>
+<thead>
+<tr><th>商家ID</th><th>商家名称</th><th>商家类型</th><th>状态</th><th>更新时间</th><th>操作人</th><th>操作</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>D10001</td><td>AI Basma Motors</td><td>二手车经销商</td>
+<td><span class="tag">启用</span></td><td>2026-07-08 15:30</td><td>admin</td>
+<td><button onclick="edit()">编辑</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="mask" class="mask"></div>
+
+<div id="drawer" class="drawer">
+<div class="drawer-header"><span>编辑开放平台商家</span><span onclick="closeAll()">×</span></div>
+<div class="drawer-body">
+<div class="section-title">基础信息</div>
+<div class="form-item"><label>商家ID</label><div class="readonly">D10001</div></div>
+<div class="form-item"><label>商家名称</label><div class="readonly">AI Basma Motors</div></div>
+<div class="form-item"><label>商家类型</label><select><option>二手车经销商</option></select></div>
+<div class="form-item"><label>状态</label><select><option>启用</option><option>禁用</option></select></div>
+
+<div class="section-title">API配置</div>
+<div class="form-item"><label>API Key</label><input id="api" value="ct_api_xxxxx"></div>
+<button onclick="regen('api')">重新生成</button>
+
+<div class="section-title">Webhook配置</div>
+<div class="form-item"><label>Webhook URL</label><input value="https://dealer.example.com/webhook"></div>
+<div class="form-item"><label>Webhook Secret</label><input id="secret" value="whsec_xxxxx"></div>
+<button onclick="regen('secret')">重新生成</button>
+</div>
+<div class="drawer-footer">
+<button onclick="closeAll()">取消</button>
+<button class="primary">保存</button>
+</div>
+</div>
+
+<div id="dialog" class="dialog">
+<h3>新增商家</h3>
+<div class="form-item"><label>商家ID</label><input placeholder="请输入商家ID"></div>
+<button onclick="closeAll()">取消</button>
+<button class="primary">新增</button>
+</div>
+
+<script>
+function edit(){drawer.classList.add('show');mask.classList.add('show')}
+function addDealer(){dialog.classList.add('show');mask.classList.add('show')}
+function closeAll(){document.querySelectorAll('.show').forEach(e=>e.classList.remove('show'))}
+function regen(id){document.getElementById(id).value='new_'+Math.random().toString(36).slice(2,12)}
+</script>
+</body>
+</html>
